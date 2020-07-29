@@ -27,6 +27,7 @@
     "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "normalize-css": "^2.3.1",
+    "numeral": "^2.0.6",
     "react": "^16.13.1",
     "react-addons-shallow-compare": "^15.6.2",
     "react-dates": "^21.8.0",
@@ -45,6 +46,6 @@
   "devDependencies": {
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "jest": "^26.1.0",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^2.11.5"
   }
 }
