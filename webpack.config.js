@@ -1,29 +1,48 @@
-const path = require("path");
-module.exports = {
-  entry: "./src/app.js",
-  output: {
-    path: path.join(__dirname, "public"),
-    filename: "bundle.js",
-  },
-  module: {
-    rules: [
-      {
-        loader: "babel-loader",
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+module.exports = (env) => {
+  const isProduction = env === 'production';
+  const CSSExtract = new ExtractTextPlugin('styles.css');
+
+  return {
+    entry: './src/app.js',
+    output: {
+      path: path.join(__dirname, 'public'),
+      filename: 'bundle.js'
+    },
+    module: {
+      rules: [{
+        loader: 'babel-loader',
         test: /\.js$/,
-        exclude: /node_modules/,
-      },
-      {
+        exclude: /node_modules/
+      }, {
         test: /\.s?css$/,
-        // '?' makes s optional; bcoz normalize-css is css file; so css also needs to be run
-        use: ["style-loader", "css-loader", "sass-loader"],
-        //use is used to load an array of loaders together
-      },
+        use: CSSExtract.extract({
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
+        })
+      }]
+    },
+    plugins: [
+      CSSExtract
     ],
-  },
-  devtool: "cheap-module-eval-source-map",
-  devServer: {
-    contentBase: path.join(__dirname, "public"), //publicfolder directory is given,
-    historyApiFallback: true, //tells react to use client-side routing
-  },
+    devtool: isProduction ? 'source-map' : 'inline-source-map',
+    devServer: {
+      contentBase: path.join(__dirname, 'public'),
+      historyApiFallback: true
+    }
+  };
 };
-// test:/\.js$/=regular expression; tells to instruct which type of files to run
