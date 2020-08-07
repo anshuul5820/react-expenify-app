@@ -1,2 +1,4 @@
 node_modules/
 pubic/dist/
+.env.test
+.env.development
