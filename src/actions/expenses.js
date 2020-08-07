@@ -1,5 +1,6 @@
 const { v4: uuid } = require("uuid");
 import database from "../firebase/firebase";
+import { set } from "numeral";
 
 // ADD_EXPENSE
 export const addExpense = (expense) => ({
@@ -36,3 +37,19 @@ export const editExpense = (id, updates) => ({
   id,
   updates,
 });
+
+export const setExpenses = (expenses) => ({ type: "SET_EXPENSES", expenses });
+export const startSetExpenses = () => {
+  return (dispatch) => {
+    return database
+      .ref("expenses")
+      .once("value")
+      .then((snapshot) => {
+        const expenses = [];
+        snapshot.forEach((childSnapshot) => {
+          expenses.push({ id: childSnapshot.key, ...childSnapshot.val() });
+        });
+        dispatch(setExpenses(expenses));
+      });
+  };
+};
